@@ -8,6 +8,7 @@ function InvoiceForm() {
   const itemRef = useRef();
   const qtyRef = useRef();
   const priceRef = useRef();
+  const GstNO = useRef();
   const [items, setItems] = useState([]);
 
   const addItem = () => {
@@ -40,13 +41,14 @@ function InvoiceForm() {
 
     const name = customerNameRef.current.value || "Customer";
     const contact = contactRef.current.value || "Not provided";
+    const gstNumber = GstNO.current.value || "Not provided";
 
     const doc = new jsPDF();
 
     // 🏢 Company Header
     doc.setFontSize(22);
     doc.setTextColor(13, 110, 253); // Bootstrap primary blue
-    doc.text("PATH ENTERPRISERS", 105, 20, { align: "center" });
+    doc.text("PATHI ENTERPRISERS", 105, 20, { align: "center" });
     
     doc.setFontSize(10);
     doc.setTextColor(100);
@@ -100,6 +102,7 @@ function InvoiceForm() {
     doc.setTextColor(0);
     doc.text(name, 15, 82);
     doc.text(contact, 15, 88);
+    doc.text(`GST No: ${gstNumber}`, 15, 94);
 
     // Prepare table data
     const tableData = items.map(item => [
@@ -218,6 +221,22 @@ doc.text(totalText, 190 - totalWidth, finalY + 15);
                   className="form-control" 
                   placeholder="Phone or Email"
                   ref={contactRef}
+                />
+              </div>
+              <small className="text-muted">We'll never share your contact details</small>
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label fw-bold">Gst Number</label>
+              <div className="input-group">
+                <span className="input-group-text bg-light">
+                  <i className="bi bi-telephone-fill text-primary"></i>
+                </span>
+                <input 
+                  type="text" 
+                  className="form-control" 
+                  placeholder="Gst Number"
+                  ref={GstNO}
                 />
               </div>
               <small className="text-muted">We'll never share your contact details</small>
