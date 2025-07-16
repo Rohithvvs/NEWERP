@@ -9,12 +9,15 @@ function InvoiceForm() {
   const qtyRef = useRef();
   const priceRef = useRef();
   const GstNO = useRef();
+  const type = useRef();
   const [items, setItems] = useState([]);
 
   const addItem = () => {
+    console.log(type.current.value);
     const item = itemRef.current.value;
-    const qty = parseFloat(qtyRef.current.value || 0);
+    const qty = parseFloat(qtyRef.current.value,type.current.value || 0);
     const price = parseFloat(priceRef.current.value || 0);
+    const itemType = type.current.value;
 
     if (item && qty > 0 && price >= 0) {
       setItems([...items, { item, qty, price, total: qty * price }]);
@@ -22,6 +25,7 @@ function InvoiceForm() {
       // Clear the item inputs
       itemRef.current.value = "";
       qtyRef.current.value = "";
+      type.current.value="";
       priceRef.current.value = "";
       itemRef.current.focus();
     }
@@ -102,7 +106,7 @@ function InvoiceForm() {
     doc.setTextColor(0);
     doc.text(name, 15, 82);
     doc.text(contact, 15, 88);
-    doc.text(`GST No: ${gstNumber}`, 15, 94);
+    doc.text(`GST/Aadhaar No: ${gstNumber}`, 15, 94);
 
     // Prepare table data
     const tableData = items.map(item => [
@@ -227,7 +231,7 @@ doc.text(totalText, 190 - totalWidth, finalY + 15);
             </div>
 
             <div className="mb-3">
-              <label className="form-label fw-bold">Gst Number</label>
+              <label className="form-label fw-bold">Gst/Aadhaar Number</label>
               <div className="input-group">
                 <span className="input-group-text bg-light">
                   <i className="bi bi-telephone-fill text-primary"></i>
@@ -235,11 +239,11 @@ doc.text(totalText, 190 - totalWidth, finalY + 15);
                 <input 
                   type="text" 
                   className="form-control" 
-                  placeholder="Gst Number"
+                  placeholder="Gst/Aadhaar Number"
                   ref={GstNO}
                 />
               </div>
-              <small className="text-muted">We'll never share your contact details</small>
+              <small className="text-muted">We'll never share your  details</small>
             </div>
           </div>
           
@@ -280,6 +284,10 @@ doc.text(totalText, 190 - totalWidth, finalY + 15);
                     ref={qtyRef}
                     onKeyPress={(e) => e.key === 'Enter' && addItem()}
                   />
+                  <select className="form-select" defaultValue="pcs/Cases" ref={type}>
+                    <option value="pcs">pcs</option>
+                    <option value="kg">Cases</option>
+                    </select>
                 </div>
               </div>
               <div className="col-md-6">
