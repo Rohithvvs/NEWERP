@@ -15,12 +15,12 @@ function InvoiceForm() {
   const addItem = () => {
     console.log(type.current.value);
     const item = itemRef.current.value;
-    const qty = parseFloat(qtyRef.current.value,type.current.value || 0);
+    const qty = parseFloat(qtyRef.current.value || 0);
     const price = parseFloat(priceRef.current.value || 0);
     const itemType = type.current.value;
 
     if (item && qty > 0 && price >= 0) {
-      setItems([...items, { item, qty, price, total: qty * price }]);
+      setItems([...items, { item, qty, itemType, price, total: parseFloat(qty) * parseFloat(price) }]);
       
       // Clear the item inputs
       itemRef.current.value = "";
@@ -111,9 +111,9 @@ function InvoiceForm() {
     // Prepare table data
     const tableData = items.map(item => [
       item.item,
-      item.qty,
-      `₹${item.price.toFixed(2)}`,
-      `₹${item.total.toFixed(2)}`
+      `${item.qty} ${item.itemType}`,
+     `${parseFloat(item.price).toFixed(2)}`,
+  `${parseFloat(item.total).toFixed(2)}`
     ]);
 
     // Calculate grand total
@@ -170,7 +170,7 @@ doc.text("Total Amount", 125, finalY + 15);
 // Amount value
 doc.setFontSize(14);
 doc.setTextColor(0);
-const totalText = `₹${grandTotal.toFixed(2)}`;
+const totalText = `${grandTotal.toFixed(2)}`;
 const totalWidth = doc.getTextWidth(totalText);
 doc.text(totalText, 190 - totalWidth, finalY + 15);
     // Footer
@@ -270,26 +270,36 @@ doc.text(totalText, 190 - totalWidth, finalY + 15);
             </div>
             
             <div className="row g-2 mb-3">
-              <div className="col-md-6">
-                <label className="form-label fw-bold">Quantity</label>
-                <div className="input-group">
-                  <span className="input-group-text bg-white">
-                    <i className="bi bi-123 text-primary"></i>
-                  </span>
-                  <input 
-                    type="number" 
-                    className="form-control" 
-                    placeholder="Qty"
-                    min="1"
-                    ref={qtyRef}
-                    onKeyPress={(e) => e.key === 'Enter' && addItem()}
-                  />
-                  <select className="form-select" defaultValue="pcs/Cases" ref={type}>
-                    <option value="pcs">pcs</option>
-                    <option value="kg">Cases</option>
-                    </select>
-                </div>
-              </div>
+           <div className="col-md-6">
+  <label className="form-label fw-bold">Quantity</label>
+  <div className="input-group">
+    <span className="input-group-text bg-white">
+      <i className="bi bi-123 text-primary"></i>
+    </span>
+
+    {/* Quantity Input */}
+    <input 
+      type="number" 
+      className="form-control" 
+      placeholder="Qty"
+      min="1"
+      ref={qtyRef}
+      onKeyPress={(e) => e.key === 'Enter' && addItem()}
+    />
+
+    {/* Quantity Type Dropdown (pcs / kg) */}
+    <select 
+      className="form-select" 
+      defaultValue="Case"
+      ref={type}
+      onKeyPress={(e) => e.key === 'Enter' && addItem()}
+    >
+      <option value="pcs">pcs</option>
+      <option value="Case">Case</option>
+    </select>
+  </div>
+</div>
+
               <div className="col-md-6">
                 <label className="form-label fw-bold">Price (₹)</label>
                 <div className="input-group">
@@ -338,7 +348,7 @@ doc.text(totalText, 190 - totalWidth, finalY + 15);
                     {items.map((item, index) => (
                       <tr key={index}>
                         <td>{item.item}</td>
-                        <td className="text-end">{item.qty}</td>
+                        <td className="text-end">{item.qty} {item.itemType}</td>
                         <td className="text-end">₹{item.price.toFixed(2)}</td>
                         <td className="text-end">₹{item.total.toFixed(2)}</td>
                         <td className="text-end">
