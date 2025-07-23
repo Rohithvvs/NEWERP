@@ -16,6 +16,8 @@ export const login = (data) => {
   });
 };
 
+
+
 export const saveToken = (token) => {
   localStorage.setItem("jwtToken", token);
 };
