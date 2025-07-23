@@ -52,13 +52,13 @@ function InvoiceForm() {
     // 🏢 Company Header
     doc.setFontSize(22);
     doc.setTextColor(13, 110, 253); // Bootstrap primary blue
-    doc.text("PATHI ENTERPRISERS", 105, 20, { align: "center" });
-    
+    //doc.text("PATHI ENTERPRISERS", 105, 20, { align: "center" });
+     doc.text("Test", 105, 20, { align: "center" });
     doc.setFontSize(10);
     doc.setTextColor(100);
     doc.text("PULIVENDULA - 516390", 105, 27, { align: "center" });
-    doc.text("Phone: +91 7799244535", 105, 32, { align: "center" });
-
+    //doc.text("Phone: +91 7799244535", 105, 32, { align: "center" });
+doc.text("Phone: +91 123456789", 105, 32, { align: "center" });
     // Invoice Info Section
     doc.setDrawColor(13, 110, 253);
     doc.setLineWidth(0.5);
