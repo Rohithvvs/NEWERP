@@ -7,16 +7,37 @@ export const Registation = (data) => {
   return axios.post(`${API_URL}/register`, data);
 };
 
-export const login = (data) => {
-  console.log("auth",data);
-  return axios.post(`${API_URL}/login`, data,{
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+// export const login = (data) => {
+//   console.log("auth",data);
+//   return axios.post(`${API_URL}/login`, data,{
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//   });
+// };
+
+
+export const login = async (data) => {
+  try {
+    const response = await axios.post(`${API_URL}/login`, data, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const { token, shopName, address } = response.data;
+
+    // Store in session storage
+    sessionStorage.setItem('token', token);
+    sessionStorage.setItem('shopName', shopName);
+    sessionStorage.setItem('address', address);
+
+    return response.data;
+  } catch (error) {
+    console.error('Login error:', error);
+    throw error;
+  }
 };
-
-
 
 export const saveToken = (token) => {
   localStorage.setItem("jwtToken", token);

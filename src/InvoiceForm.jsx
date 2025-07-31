@@ -18,9 +18,10 @@ function InvoiceForm() {
     const qty = parseFloat(qtyRef.current.value || 0);
     const price = parseFloat(priceRef.current.value || 0);
     const itemType = type.current.value;
+    const gst= parseFloat(GstNO.current.value)
 
     if (item && qty > 0 && price >= 0) {
-      setItems([...items, { item, qty, itemType, price, total: parseFloat(qty) * parseFloat(price) }]);
+      setItems([...items, { item, qty, itemType, price,gst, total: parseFloat(qty) * parseFloat(price) }]);
       
       // Clear the item inputs
       itemRef.current.value = "";
@@ -53,12 +54,12 @@ function InvoiceForm() {
     doc.setFontSize(22);
     doc.setTextColor(13, 110, 253); // Bootstrap primary blue
     doc.text("PATHI ENTERPRISERS", 105, 20, { align: "center" });
-    // doc.text("Test", 105, 20, { align: "center" });
+    
     doc.setFontSize(10);
     doc.setTextColor(100);
-    doc.text("Near JNTU Colloge, 2-3-118-67, Pulivendula,YSR Kadapa Dist - 516390 ", 105, 27, { align: "center" });
-    doc.text(" GST: 37ASUPP5476HTZU Phone: +91 7799244535", 105, 32, { align: "center" });
-//doc.text("Phone: +91 123456789", 105, 32, { align: "center" });
+    doc.text("PULIVENDULA - 516390", 105, 27, { align: "center" });
+    doc.text("Phone: +91 7799244535", 105, 32, { align: "center" });
+
     // Invoice Info Section
     doc.setDrawColor(13, 110, 253);
     doc.setLineWidth(0.5);
@@ -82,7 +83,8 @@ function InvoiceForm() {
   const invoiceNumber = `INV-${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, '0')}${String(today.getDate()).padStart(2, '0')}-${Math.floor(1000 + Math.random() * 9000)}`;
 
   // Format date and time in Indian style
-  const options = { 
+  const options = 
+  { 
     day: '2-digit', 
     month: 'short', 
     year: 'numeric',
@@ -277,7 +279,7 @@ doc.text(totalText, 190 - totalWidth, finalY + 15);
       <i className="bi bi-123 text-primary"></i>
     </span>
 
-    {/* Quantity Input */}
+
     <input 
       type="number" 
       className="form-control" 
@@ -287,7 +289,6 @@ doc.text(totalText, 190 - totalWidth, finalY + 15);
       onKeyPress={(e) => e.key === 'Enter' && addItem()}
     />
 
-    {/* Quantity Type Dropdown (pcs / kg) */}
     <select 
       className="form-select" 
       defaultValue="Case"
@@ -300,7 +301,7 @@ doc.text(totalText, 190 - totalWidth, finalY + 15);
   </div>
 </div>
 
-              <div className="col-md-6">
+              <div className="col-md-3">
                 <label className="form-label fw-bold">Price (₹)</label>
                 <div className="input-group">
                   <span className="input-group-text bg-white">
@@ -315,6 +316,24 @@ doc.text(totalText, 190 - totalWidth, finalY + 15);
                     ref={priceRef}
                     onKeyPress={(e) => e.key === 'Enter' && addItem()}
                   />
+                </div>
+              </div>
+              
+              <div className="col-md-3">
+                <label className="form-label fw-bold">GST</label>
+                <div className="input-group">
+                  <span className="input-group-text bg-white">
+                    <i className="bi bi-currency-rupee text-primary"></i>
+                  </span>
+                     <select 
+      className="form-select" 
+      defaultValue="Case"
+      ref={GstNO}
+      onKeyPress={(e) => e.key === 'Enter' && addItem()}
+    >
+      <option value="6">6%</option>
+      <option value="12">12%</option>
+    </select>
                 </div>
               </div>
             </div>
